@@ -1,6 +1,6 @@
 # [Theklarakers.com - Portfolio](https://theklarakers.com/)
 
-[![Grayscale Preview](https://theklarakers.com/img/templates/screenshot.png)](https://github.com/theklarakers/portfolio)
+[![Portfolio Preview](http://theklarakers.visser.online/img/templates/screenshot.png)](https://github.com/theklarakers/portfolio)
 
 **[View Live Preview](https://theklarakers.com/)**
 
