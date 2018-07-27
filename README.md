@@ -23,6 +23,13 @@ To begin using this template with `docker`:
 - `gulp copy` copies dependencies from node_modules to the vendor directory
 - `gulp build` builds and copies the complete website to the build directory
 
+## Development
+
+Run:
+- `docker build -t jvisser/theklarakers_com-dev -f Dockerfile.dev .` to build the image
+- To update npm packages run `docker run -it --rm -v $PWD:/app jvisser/theklarakers_com-dev npm update`
+
+
 ## Copyright and License
 
 Copyright 2018 Jeroen Visser. Code released under the MIT license.
