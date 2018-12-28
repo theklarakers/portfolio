@@ -29,10 +29,10 @@ DEPENDENCIES := \
 	gulpfile.js
 
 DOCKER_IMAGE_PREFIX ?= jvisser/$(PROJECT_NAME)
-DOCKER_IMAGE = $(DOCKER_IMAGE_PREFIX)-website
+DOCKER_IMAGE = $(DOCKER_IMAGE_PREFIX)-website:dist
 DOCKER_BUILD_ARGS += --cache-from $(DOCKER_IMAGE)
 # Prevent pulling a base image from Docker Hub that has just been built locally
-DOCKER_BUILD_ARGS += $(shell echo "$?" | grep -q \.docker-built || echo "--pull")
+DOCKER_BUILD_ARGS += $(shell echo "$?" | grep -q \.built || echo "--pull")
 # Tag :dist images also with DOCKER_DEPLOY_TAG (commit hash + timestamp)
 export DOCKER_DEPLOY_TAG  ?= $(shell git --no-pager show -s --format="%h")
 DOCKER_DIST_IMAGE         = $(subst :dist,:$(DOCKER_DEPLOY_TAG),$(DOCKER_IMAGE))
