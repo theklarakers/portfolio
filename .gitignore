@@ -4,24 +4,28 @@ yarn-debug.log*
 yarn-error.log*
 
 # Grunt intermediate storage (http://gruntjs.com/creating-plugins#storing-task-files)
-.grunt
+/.grunt
 
 # Compiled binary addons (https://nodejs.org/api/addons.html)
-build/
-vendor/
-css/
+/build/
+/vendor/
+/css/
 
 # Dependency directories
-node_modules/
+/node_modules/
 
 # Optional npm cache directory
-.npm
+/.npm
 
 # IntelliJ IDEA
-.idea
+/.idea
 
 # OSX
-.DS_Store
+/.DS_Store
 
-.built
-.pushed
+/.built
+/.pushed
+
+/.ansible-vault-password
+/make/kubernetes.vars.mk
+/.kube/
