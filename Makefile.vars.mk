@@ -1,3 +1,6 @@
+# Default shell to use
+SHELL := /bin/bash -o pipefail
+
 # Project root directory
 export ROOT_DIR := $(abspath .)
 

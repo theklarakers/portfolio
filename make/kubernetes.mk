@@ -1,5 +1,5 @@
 ifndef KUBE_APP_NAMESPACE
-$(error Please define and export the kubernetes namespace (alphanumeric characters only) in a variable named KUBE_APP_NAMESPACE)
+	$(error Please define and export the kubernetes namespace (alphanumeric characters only) in a variable named KUBE_APP_NAMESPACE)
 endif
 
 include $(MAKE_INCLUDES_DIR)/kubernetes.vars.mk
