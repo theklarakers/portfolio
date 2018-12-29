@@ -1,12 +1,3 @@
-#
-# For more information on some of the magic targets, variables and flags used, see:
-#  - [1] https://www.gnu.org/software/make/manual/html_node/Special-Targets.html
-#  - [2] https://www.gnu.org/software/make/manual/html_node/Secondary-Expansion.html
-#  - [3] https://www.gnu.org/software/make/manual/html_node/Suffix-Rules.html
-#  - [4] https://www.gnu.org/software/make/manual/html_node/Options-Summary.html
-#  - [5] https://www.gnu.org/software/make/manual/html_node/Special-Variables.html
-#
-
 # Ensure (intermediate) targets are deleted when an error occurred executing a recipe, see [1]
 .DELETE_ON_ERROR:
 

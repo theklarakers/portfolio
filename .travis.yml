@@ -38,6 +38,7 @@ before_script:
 # Configure ansible vault password to decrypt secrets
 - echo "$VAULT_PASSWORD" > .ansible-vault-password
 - if [ "$TRAVIS_EVENT_TYPE" == "cron" ]; then export DOCKER_CACHE=off; fi
+- make kube-list-pods
 
 deploy:
 - provider: script

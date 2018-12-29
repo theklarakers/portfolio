@@ -4,11 +4,15 @@ endif
 
 include $(MAKE_INCLUDES_DIR)/kubernetes.vars.mk
 
+ifndef KUBE_CLUSTER_ID
+$(error Please define and export the kubernetes cluster id (alphanumeric characters only) in a variable named KUBE_CLUSTER_ID)
+endif
+
 $(MAKE_INCLUDES_DIR)/kubernetes.vars.mk: $(MAKE_INCLUDES_DIR)/kubernetes.vars.mk.enc | $(CRYPT_SECRET)
 	$(__DECRYPT)
 
 KUBE_CONFIG_DIR := $(ROOT_DIR)/.kube
-KUBE_CONFIG := $(KUBE_CONFIG_DIR)/kubeconfig
+KUBE_CONFIG := .kube/kubeconfig
 KUBECTL_DEPS := $(KUBE_CONFIG)
 
 KUBECTL_ARGS ?= --kubeconfig .kube/kubeconfig
@@ -30,23 +34,27 @@ KUBE_CLUSTER_URL := https://api.digitalocean.com/v2/kubernetes/clusters/$(KUBE_C
 KUBE_CLUSTER_CONFIG_URL := $(KUBE_CLUSTER_URL)/kubeconfig
 DIGITAL_OCEAN_AUTH_TOKEN := curl -H "Authorization: Bearer $(DIGITAL_OCEAN_TOKEN)"
 
-## .make/kubeconfig: Retrieve a Kubeconfig file for use with a Kubernetes cluster
-.make/kubeconfig:
+## .kube/kubeconfig: Retrieve a Kubeconfig file for use with a Kubernetes cluster
+$(KUBE_CONFIG):
 	@echo "Loading configuration file"
 	@mkdir -p .kube
 	@curl --url $(KUBE_CLUSTER_CONFIG_URL) -# -H "Authorization: Bearer $(DIGITAL_OCEAN_TOKEN)" -o $(KUBE_CONFIG)
 	@echo "Done loading configuration file!"
 
 ## kube-list-pods: Show running pods in kubernetes cluster namespace
-kube-list-pods:
+kube-create-namespace: $(KUBECTL_DEPS)
+	$(KUBECTL_NS) create namespace $(KUBE_APP_NAMESPACE)
+
+## kube-list-pods: Show running pods in kubernetes cluster namespace
+kube-list-pods: $(KUBECTL_DEPS)
 	$(KUBECTL_NS) get pods
 
 ## kube-list-deployments: Show deployments in kubernetes cluster namespace
-kube-list-deployments:
+kube-list-deployments: $(KUBECTL_DEPS)
 	@$(KUBECTL_NS) get deployments
 
 ## kube-list-of-pods-in-all-namespaces: Show running pods in all namespace
-kube-list-of-pods-in-all-namespaces:
+kube-list-of-pods-in-all-namespaces: $(KUBECTL_DEPS)
 	$(KUBECTL) get pods --all-namespaces
 
 .PHONY: entrypoint-kubectl
