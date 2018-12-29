@@ -28,13 +28,17 @@ KUBECTL_NS = $(KUBECTL) --namespace $(KUBE_APP_NAMESPACE)
 
 KUBE_CLUSTER_URL := https://api.digitalocean.com/v2/kubernetes/clusters/$(KUBE_CLUSTER_ID)
 KUBE_CLUSTER_CONFIG_URL := $(KUBE_CLUSTER_URL)/kubeconfig
-DIGITAL_OCEAN_AUTH_TOKEN := curl -H "Authorization: Bearer $(DIGITAL_OCEAN_TOKEN)"
 
 ## .kube/kubeconfig: Retrieve a Kubeconfig file for use with a Kubernetes cluster
 $(KUBE_CONFIG):
 	@echo "Loading configuration file"
 	@mkdir -p .kube
-	@curl --url $(KUBE_CLUSTER_CONFIG_URL) -# -H "Authorization: Bearer $(DIGITAL_OCEAN_TOKEN)" -o $(KUBE_CONFIG)
+	@curl --silent \
+		  --show-error \
+		  --fail \
+		  --url $(KUBE_CLUSTER_CONFIG_URL) \
+		  -H "Authorization: Bearer $(DIGITAL_OCEAN_TOKEN)" \
+		  -o $(KUBE_CONFIG)
 	@echo "Done loading configuration file!"
 
 ## kube-list-pods: Show running pods in kubernetes cluster namespace
