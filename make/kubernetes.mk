@@ -4,10 +4,6 @@ endif
 
 include $(MAKE_INCLUDES_DIR)/kubernetes.vars.mk
 
-ifndef KUBE_CLUSTER_ID
-$(error Please define and export the kubernetes cluster id (alphanumeric characters only) in a variable named KUBE_CLUSTER_ID)
-endif
-
 $(MAKE_INCLUDES_DIR)/kubernetes.vars.mk: $(MAKE_INCLUDES_DIR)/kubernetes.vars.mk.enc | $(CRYPT_SECRET)
 	$(__DECRYPT)
 
