@@ -43,7 +43,7 @@ spec:
     spec:
       containers:
       - name: web
-        image: jvisser/theklarakers-website:32e0706
+        image: jvisser/theklarakers-website:${DOCKER_DEPLOY_TAG}
         imagePullPolicy: Always
         ports:
         - containerPort: 80
