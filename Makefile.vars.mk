@@ -17,4 +17,6 @@ DEPENDENCIES := \
 	gulpfile.js
 
 KUBE_YAMLS := docker/kube/kube.yaml
+KUBE_YAML_PRODUCTION_ISSUER := docker/kube/production_issuer.yaml
+KUBE_YAML_STAGING_ISSUER := docker/kube/staging_issuer.yaml
 KUBE_DEPLOY_WAIT_RESOURCES := deploy/web

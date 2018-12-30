@@ -81,3 +81,29 @@ kube-list-of-pods-in-all-namespaces: $(KUBECTL_DEPS)
 entrypoint-kubectl: KUBE_DOCKER_ARGS += --tty --interactive
 entrypoint-kubectl: | $(KUBECTL_DEPS)
 	$(KUBECTL) $(ARGS)
+
+## deploy-lets-encrypt-staging-issuer: Deploy the kubernetes component to deploy the let's encrypt staging issuer
+.PHONY: deploy-lets-encrypt-staging-issuer
+deploy-lets-encrypt-staging-issuer: KUBECTL_DOCKER_ARGS += --interactive
+deploy-lets-encrypt-staging-issuer: $(KUBE_YAMLS) | $(KUBE_CONFIG) app-namespace
+	cat $(KUBE_YAML_STAGING_ISSUER) | envsubst | $(KUBECTL) apply -f -
+	/bin/bash -ec ' \
+		if ! test -z "$(KUBE_DEPLOY_WAIT_RESOURCES)"; then \
+			for RESOURCE_ID in $$(echo "$(KUBE_DEPLOY_WAIT_RESOURCES)" | tr " " "\n"); do \
+				$(KUBECTL_NS) rollout status $$RESOURCE_ID; \
+			done; \
+		fi \
+	'
+
+## deploy-lets-encrypt-production-issuer: Deploy the kubernetes component to deploy the let's encrypt production issuer
+.PHONY: deploy-lets-encrypt-production-issuer
+deploy-lets-encrypt-production-issuer: KUBECTL_DOCKER_ARGS += --interactive
+deploy-lets-encrypt-production-issuer: $(KUBE_YAMLS) | $(KUBE_CONFIG) app-namespace
+	cat $(KUBE_YAML_PRODUCTION_ISSUER) | envsubst | $(KUBECTL) apply -f -
+	/bin/bash -ec ' \
+		if ! test -z "$(KUBE_DEPLOY_WAIT_RESOURCES)"; then \
+			for RESOURCE_ID in $$(echo "$(KUBE_DEPLOY_WAIT_RESOURCES)" | tr " " "\n"); do \
+				$(KUBECTL_NS) rollout status $$RESOURCE_ID; \
+			done; \
+		fi \
+	'
