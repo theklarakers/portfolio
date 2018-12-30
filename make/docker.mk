@@ -16,7 +16,6 @@ DOCKER_RUN = docker run --rm -u $(HOST_UID):$(HOST_GID) -e HOME=/home
 docker-build: .built
 
 .built: $$(shell find . -maxdepth 0 -type f -not -name .built -not -name .pushed)
-	-docker pull $(DOCKER_IMAGE)
 	docker build $(DOCKER_BUILD_ARGS) -t $(DOCKER_IMAGE) $(@D)
 
 	touch $@

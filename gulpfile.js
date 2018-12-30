@@ -111,7 +111,7 @@ gulp.task('dev', ['browserSync', 'sass', 'minify-css', 'minify-js'], function() 
 });
 
 gulp.task('build', ['sass', 'minify-css', 'minify-js', 'copy'], function() {
-  gulp.src(['vendor/**']).pipe(gulp.dest('build/vendor'));
+  gulp.src(['vendor/**/*']).pipe(gulp.dest('build/vendor'));
   gulp.src(['css/**/*']).pipe(gulp.dest('build/css'));
   gulp.src(['js/**/*']).pipe(gulp.dest('build/js'));
   gulp.src(['img/**/*']).pipe(gulp.dest('build/img'));
