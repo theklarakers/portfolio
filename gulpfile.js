@@ -77,7 +77,7 @@ gulp.task('copy', function() {
   gulp.src(['node_modules/jquery.easing/*.js'])
     .pipe(gulp.dest('vendor/jquery-easing'))
 
-  gulp.src([
+  return gulp.src([
       'node_modules/font-awesome/**',
       '!node_modules/font-awesome/**/*.map',
       '!node_modules/font-awesome/.npmignore',
