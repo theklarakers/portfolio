@@ -15,7 +15,6 @@ KUBECTL_ARGS ?= --kubeconfig .kube/kubeconfig
 # Shortcuts for invoking the kubectl binaries
 KUBECTL_DOCKER_ARGS ?=
 KUBECTL = $(DOCKER_RUN) \
-	-it \
 	-v $(KUBE_CONFIG_DIR):/home/.kube \
 	-v $(ROOT_DIR):/workspace \
 	--workdir /workspace \
@@ -41,9 +40,30 @@ $(KUBE_CONFIG):
 		  -o $(KUBE_CONFIG)
 	@echo "Done loading configuration file!"
 
-## kube-list-pods: Show running pods in kubernetes cluster namespace
-kube-create-namespace: $(KUBECTL_DEPS)
-	$(KUBECTL_NS) create namespace $(KUBE_APP_NAMESPACE)
+## dry-run-deployment: Output the deployment configuration as it would be send to Kubernetes
+dry-run-deployment: $(KUBE_YAMLS)
+	cat $(KUBE_YAMLS) | envsubst
+
+## deploy: Deploy the kubernetes components defined in the yaml files as specified in $(KUBE_YAMLS)
+.PHONY: deploy
+deploy: KUBECTL_DOCKER_ARGS += --interactive
+deploy: $(KUBE_YAMLS) | $(KUBE_CONFIG) app-namespace
+	cat $(KUBE_YAMLS) | envsubst | $(KUBECTL) apply -f -
+	/bin/bash -ec ' \
+		if ! test -z "$(KUBE_DEPLOY_WAIT_RESOURCES)"; then \
+			for RESOURCE_ID in $$(echo "$(KUBE_DEPLOY_WAIT_RESOURCES)" | tr " " "\n"); do \
+				$(KUBECTL_NS) rollout status $$RESOURCE_ID; \
+			done; \
+		fi \
+	'
+
+# Create the application namespace in the kubernetes cluster
+.PHONY: app-namespace
+app-namespace: | $(KUBECTL_DEPS)
+	$(SHELL) -c '\
+		$(KUBECTL) get namespace $(KUBE_APP_NAMESPACE) > /dev/null 2>&1 || \
+		$(KUBECTL) create namespace $(KUBE_APP_NAMESPACE) \
+	'
 
 ## kube-list-pods: Show running pods in kubernetes cluster namespace
 kube-list-pods: $(KUBECTL_DEPS)

@@ -15,3 +15,6 @@ DEPENDENCIES := \
 	package-lock.json \
 	package.json \
 	gulpfile.js
+
+KUBE_YAMLS := docker/kube/kube.yaml
+KUBE_DEPLOY_WAIT_RESOURCES := deploy/web

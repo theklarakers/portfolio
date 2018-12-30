@@ -5,13 +5,7 @@ metadata:
   namespace: theklarakers
   annotations:
     kubernetes.io/ingress.class: nginx
-    certmanager.k8s.io/cluster-issuer: letsencrypt-staging
-    nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
-  tls:
-  - hosts:
-    - theklarakers.com
-    secretName: letsencrypt-staging
   rules:
   - host: theklarakers.com
     http:
@@ -19,7 +13,7 @@ spec:
       - path: /
         backend:
           serviceName: web
-          servicePort: 1080
+          servicePort: 80
 ---
 kind: Service
 apiVersion: v1
@@ -32,20 +26,7 @@ spec:
   selector:
     run: web
   ports:
-  - port: 1080
----
-kind: Service
-apiVersion: v1
-metadata:
-  name: app
-  namespace: theklarakers
-  labels:
-    run: app
-spec:
-  selector:
-    run: app
-  ports:
-  - port: 9000
+  - port: 80
 ---
 kind: Deployment
 apiVersion: apps/v1beta1
@@ -62,77 +43,7 @@ spec:
     spec:
       containers:
       - name: web
-        image: theklarakers/website-web:dist
-        imagePullPolicy: Always
-        workingDir: /var/www
-        ports:
-        - containerPort: 1080
-        volumeMounts:
-        - mountPath: /etc/nginx/conf.d/custom
-          name: web-config
-        - mountPath: /var/cache/nginx
-          name: web-cache
-        - mountPath: /run
-          name: web-run
-        readinessProbe:
-          tcpSocket:
-            port: 1080
-          failureThreshold: 5
-        resources:
-          requests:
-            cpu: 0.1
-            memory: 64Mi
-          limits:
-            cpu: 0.25
-            memory: 128Mi
-      volumes:
-      - name: web-config
-        emptyDir: {}
-      - name: web-cache
-        emptyDir: {}
-      - name: web-run
-        emptyDir: {}
----
-kind: Deployment
-apiVersion: apps/v1beta1
-metadata:
-  name: app
-  namespace: theklarakers
-spec:
-  replicas: 2
-  progressDeadlineSeconds: 90
-  template:
-    metadata:
-      labels:
-        run: app
-    spec:
-      containers:
-      - name: app
-        image: theklarakers/website-app:dist
+        image: jvisser/theklarakers-website:32e0706
         imagePullPolicy: Always
         ports:
-        - containerPort: 9000
-        envFrom:
-        - secretRef:
-            name: app-config
-        volumeMounts:
-        - mountPath: /tmp
-          name: app-tmp
-        livenessProbe:
-          tcpSocket:
-            port: 9000
-          initialDelaySeconds: 5
-        readinessProbe:
-          tcpSocket:
-            port: 9000
-          failureThreshold: 5
-        resources:
-          requests:
-            cpu: 0.1
-            memory: 128Mi
-          limits:
-            cpu: 0.5
-            memory: 256Mi
-      volumes:
-      - name: app-tmp
-        emptyDir: {}
+        - containerPort: 80
