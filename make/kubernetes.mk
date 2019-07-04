@@ -14,7 +14,7 @@ KUBECTL_DEPS := $(KUBE_CONFIG)
 KUBECTL_ARGS ?= --kubeconfig .kube/kubeconfig
 # Shortcuts for invoking the kubectl binaries
 KUBECTL_DOCKER_ARGS ?=
-KUBECTL = $(DOCKER_RUN) \
+KUBECTL = docker run \
 	-v $(KUBE_CONFIG_DIR):/home/.kube \
 	-v $(ROOT_DIR):/workspace \
 	--workdir /workspace \
