@@ -1,5 +1,7 @@
 language: minimal
 
+dist: xenial
+
 git:
   depth: 10
   quiet: true
@@ -8,30 +10,6 @@ env:
   global:
   - VERBOSE=true
   - HEADLESS=on
-
-before_install:
-- docker --version
-- curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-- sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
-- sudo add-apt-repository -y ppa:ansible/ansible
-- sudo apt-get update
-- sudo apt-get -y --allow-unauthenticated install docker-ce ansible
-- docker --version
-- ansible --version
-# Update GNU Make to a version that supports output grouping of parallel executed targets
-- |
-  ( \
-    test -d ~/.make/make-4.1 || \
-    ( \
-      pushd ~/.make && wget http://ftp.gnu.org/gnu/make/make-4.1.tar.gz && \
-      tar xvf make-4.1.tar.gz && cd make-4.1 && \
-      ./configure && make && popd \
-    ) \
-  ) && pushd ~/.make/make-4.1 && sudo make install && sudo ln -sf /usr/local/bin/make /usr/bin/make && popd
-- make --version
-# Use makefile weaver to automatically add start and end target markers
-- sudo sh -c 'curl -fsSL https://github.com/jankramer/makefile-weaver/releases/download/0.4/makefile-weaver-linux-amd64 > /usr/local/bin/makefile-weaver && chmod +x /usr/local/bin/makefile-weaver'
-- makefile-weaver Makefile .make/*.mk
 
 before_script:
 - echo "$DOCKER_PASSWORD" | docker login -u $DOCKER_USERNAME --password-stdin

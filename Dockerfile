@@ -1,22 +1,22 @@
 ### STAGE 1: Build ###
 
 # We label our stage as ‘builder’
-FROM node:8.1.4-alpine as builder
+FROM node:8.16-alpine as builder
 
 COPY package.json package-lock.json ./
 
-## Storing node modules on a separate layer will prevent unnecessary npm installs at each build
+# Storing node modules on a separate layer will prevent unnecessary npm installs at each build
 RUN npm i --silent && mkdir /app && cp -R ./node_modules ./app
 
 WORKDIR /app
 
 COPY . .
 
-## Build the angular app in production mode and store the artifacts in dist folder
+# Build the angular app in production mode and store the artifacts in dist folder
 RUN $(npm bin)/gulp build
 
 
-### STAGE 2: Setup ###
+## STAGE 2: Setup ###
 
 FROM nginx:1.13.8-alpine
 

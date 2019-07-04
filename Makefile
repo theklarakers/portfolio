@@ -23,3 +23,17 @@ include make/help.mk
 include make/crypt.mk
 include make/docker.mk
 include make/kubernetes.mk
+
+node_modules/.installed: ENV = dev
+node_modules/.installed: .built-dev | ~/.npm
+	$(DOCKER_RUN) npm install
+
+	touch $@
+
+.built-dist: ENV=dist
+.built-dist: node_modules/.installed
+
+.PHONY: npm-update
+npm-update: DOCKER_RUN_ARGS += -it
+npm-update: .built | ~/.npm
+	$(DOCKER_RUN) sh

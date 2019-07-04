@@ -23,7 +23,8 @@ yarn-error.log*
 # OSX
 /.DS_Store
 
-/.built
+/.built-dist
+/.built-dev
 /.pushed
 
 /.ansible-vault-password
