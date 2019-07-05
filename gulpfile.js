@@ -102,7 +102,7 @@ gulp.task('browserSync', function() {
 });
 
 // Dev task with browserSync
-gulp.task('dev', ['browserSync', 'sass', 'minify-css', 'minify-js', 'move'], function() {
+gulp.task('dev', ['browserSync', 'sass', 'minify-css', 'minify-js', 'copy', 'move'], function() {
   gulp.watch('scss/*.scss', ['sass', 'move']);
   gulp.watch('css/*.css', ['minify-css', 'move']);
   gulp.watch('js/*.js', ['minify-js', 'move']);
@@ -114,7 +114,13 @@ gulp.task('dev', ['browserSync', 'sass', 'minify-css', 'minify-js', 'move'], fun
   gulp.watch('scss/*.scss', browserSync.reload);
 });
 
-gulp.task('build', ['sass', 'minify-css', 'minify-js', 'copy', 'move']);
+gulp.task('build', ['sass', 'minify-css', 'minify-js', 'copy'], function() {
+    gulp.src(['vendor/**/*']).pipe(gulp.dest('build/vendor'));
+    gulp.src(['css/**/*']).pipe(gulp.dest('build/css'));
+    gulp.src(['js/**/*']).pipe(gulp.dest('build/js'));
+    gulp.src(['img/**/*']).pipe(gulp.dest('build/img'));
+    gulp.src('index.html').pipe(gulp.dest('build/'));
+});
 
 gulp.task('move', [], function() {
     gulp.src(['vendor/**/*']).pipe(gulp.dest('build/vendor'));

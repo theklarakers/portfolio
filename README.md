@@ -39,7 +39,7 @@ OR:
 
 ## Copyright and License
 
-Copyright 2018 Jeroen Visser. Code released under the MIT license.
+Copyright 2019 Jeroen Visser. Code released under the MIT license.
 
 ## Thnx
 The template is based on the Start Bootstrap [Grayscale template](https://github.com/BlackrockDigital/startbootstrap-grayscale)!
