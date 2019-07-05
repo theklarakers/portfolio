@@ -25,7 +25,8 @@ yarn-error.log*
 
 /.built-dist
 /.built-dev
-/.pushed
+/.push-dev
+/.push-dist
 
 /.ansible-vault-password
 /make/kubernetes.vars.mk
