@@ -24,6 +24,12 @@ include make/crypt.mk
 include make/docker.mk
 include make/kubernetes.mk
 
+.PHONY: shell
+shell: DOCKER_RUN_ARGS=-it
+shell: ENV=dev
+shell: .built-dev
+	$(DOCKER_RUN) sh
+
 .PHONY: watch
 watch: DOCKER_RUN_ARGS=-p 3000:3000
 watch: ENV=dev

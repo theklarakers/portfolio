@@ -36,6 +36,9 @@ OR:
 
 - Run `make watch` and open `http://localhost:3000` and start developing with browserSync
 
+### Shell
+
+You can enter a shell to the docker node image for eventual debugging.
 
 ## Copyright and License
 
