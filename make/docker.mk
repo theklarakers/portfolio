@@ -47,7 +47,7 @@ docker-push: .push-dist
 
 .PHONY: .push-dist
 .push-dist: ENV=dist
-.push-dist: .built-dist
+.push-dist: .push-dev .built-dist
 	docker push $(DOCKER_IMAGE)
 
 	# Push alias for dist images with the timestamp and hash of the current git commit
@@ -56,7 +56,7 @@ docker-push: .push-dist
 	touch $@
 
 .built-dist: ENV=dist
-.built-dist: Dockerfile .push-dev
+.built-dist: Dockerfile
 	docker build $(DOCKER_BUILD_ARGS) --tag $(DOCKER_IMAGE) --file $< $(ROOT_DIR)
 
 	touch $@
