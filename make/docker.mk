@@ -51,7 +51,7 @@ docker-push: .push-dist
 	docker push $(DOCKER_IMAGE)
 
 	# Push alias for dist images with the timestamp and hash of the current git commit
-	([[ "$(DOCKER_IMAGE)" == *":dist" ]] && docker push $(DOCKER_IMAGE)) || :
+	([[ "$(DOCKER_IMAGE)" == *":dist" ]] && docker push $(DOCKER_DIST_IMAGE)) || :
 
 	touch $@
 
