@@ -23,10 +23,8 @@ yarn-error.log*
 # OSX
 /.DS_Store
 
-/.built-dist
-/.built-dev
-/.push-dev
-/.push-dist
+/.built-*
+/.push-*
 
 /.ansible-vault-password
 /make/kubernetes.vars.mk

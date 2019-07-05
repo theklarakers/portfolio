@@ -24,16 +24,24 @@ include make/crypt.mk
 include make/docker.mk
 include make/kubernetes.mk
 
-node_modules/.installed: ENV = dev
-node_modules/.installed: .built-dev | ~/.npm
+.PHONY: watch
+watch: DOCKER_RUN_ARGS=-p 3000:3000
+watch: ENV=dev
+watch: .built-dev
+	$(DOCKER_RUN) npm run watch
+
+node_modules/.installed: ENV=dev
+node_modules/.installed: | ~/.npm
 	$(DOCKER_RUN) npm install
 
 	touch $@
+
+.built-dev: node_modules/.installed
 
 .built-dist: ENV=dist
 .built-dist: node_modules/.installed
 
 .PHONY: npm-update
 npm-update: DOCKER_RUN_ARGS += -it
-npm-update: .built | ~/.npm
+npm-update: .built-dev | ~/.npm
 	$(DOCKER_RUN) sh

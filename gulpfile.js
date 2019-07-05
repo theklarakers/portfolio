@@ -95,25 +95,31 @@ gulp.task('default', ['sass', 'minify-css', 'minify-js', 'copy']);
 gulp.task('browserSync', function() {
   browserSync.init({
     server: {
-      baseDir: ''
+      baseDir: 'build',
     },
+    host: '0.0.0.0'
   })
 });
 
 // Dev task with browserSync
-gulp.task('dev', ['browserSync', 'sass', 'minify-css', 'minify-js'], function() {
-  gulp.watch('scss/*.scss', ['sass']);
-  gulp.watch('css/*.css', ['minify-css']);
-  gulp.watch('js/*.js', ['minify-js']);
-  // Reloads the browser whenever HTML or JS files change
+gulp.task('dev', ['browserSync', 'sass', 'minify-css', 'minify-js', 'move'], function() {
+  gulp.watch('scss/*.scss', ['sass', 'move']);
+  gulp.watch('css/*.css', ['minify-css', 'move']);
+  gulp.watch('js/*.js', ['minify-js', 'move']);
+  gulp.watch('*.html', ['move']);
+  // Reloads the browser whenever HTML, SCSS, CSS or JS files change
   gulp.watch('*.html', browserSync.reload);
   gulp.watch('js/**/*.js', browserSync.reload);
+  gulp.watch('css/*.css', browserSync.reload);
+  gulp.watch('scss/*.scss', browserSync.reload);
 });
 
-gulp.task('build', ['sass', 'minify-css', 'minify-js', 'copy'], function() {
-  gulp.src(['vendor/**/*']).pipe(gulp.dest('build/vendor'));
-  gulp.src(['css/**/*']).pipe(gulp.dest('build/css'));
-  gulp.src(['js/**/*']).pipe(gulp.dest('build/js'));
-  gulp.src(['img/**/*']).pipe(gulp.dest('build/img'));
-  gulp.src('index.html').pipe(gulp.dest('build/'));
+gulp.task('build', ['sass', 'minify-css', 'minify-js', 'copy', 'move']);
+
+gulp.task('move', [], function() {
+    gulp.src(['vendor/**/*']).pipe(gulp.dest('build/vendor'));
+    gulp.src(['css/**/*']).pipe(gulp.dest('build/css'));
+    gulp.src(['js/**/*']).pipe(gulp.dest('build/js'));
+    gulp.src(['img/**/*']).pipe(gulp.dest('build/img'));
+    gulp.src('index.html').pipe(gulp.dest('build/'));
 });
