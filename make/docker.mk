@@ -27,8 +27,8 @@ docker-login:
 ## docker-build: Will build the image (with dist and git hash tag)
 docker-build: .built-dist
 
-.built-dist: ENV ?= dist
-.built-dist: Dockerfile
+.built-dist: ENV=dist
+.built-dist: Dockerfile .push-dev
 	docker build $(DOCKER_BUILD_ARGS) --tag $(DOCKER_IMAGE) --file $< $(ROOT_DIR)
 
 	touch $@
@@ -38,13 +38,25 @@ docker-build: .built-dist
 
 	touch $@
 
-## docker-push: Will push the images to Docker Hub
-docker-push: .pushed
-
-.pushed: .built-dist
+.PHONY: .push-dev
+.push-dev: ENV=dev
+.push-dev: .built-dist
 	docker push $(DOCKER_IMAGE)
 
 	# Push alias for dist images with the timestamp and hash of the current git commit
-	([[ "$(DOCKER_IMAGE)" == *":dist" ]] && docker push $(DOCKER_DIST_IMAGE)) || :
+	([[ "$(DOCKER_IMAGE)" == *":dev" ]] && docker push $(DOCKER_IMAGE)) || :
+
+	touch $@
+
+## docker-push: Will push the images to Docker Hub
+docker-push: .push-dist
+
+.PHONY: .push-dist
+.push-dist: ENV=dist
+.push-dist: .built-dist
+	docker push $(DOCKER_IMAGE)
+
+	# Push alias for dist images with the timestamp and hash of the current git commit
+	([[ "$(DOCKER_IMAGE)" == *":dist" ]] && docker push $(DOCKER_IMAGE)) || :
 
 	touch $@
