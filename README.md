@@ -6,6 +6,9 @@
 
 ## Download and Installation
 
+To begin using this template with `make`:
+- Run `make watch` and open `http://localhost:3000` and start developing with browserSync
+
 To begin using this template with `NPM`:
 * Clone the repo: `git clone https://github.com/theklarakers/portfolio.git`
 * Run `npm install` and `npm run watch` and open `http://localhost:3000`
@@ -28,6 +31,10 @@ To begin using this template with `docker`:
 Run:
 - `docker build -t jvisser/theklarakers_com-dev -f Dockerfile.dev .` to build the image
 - To update npm packages run `docker run -it --rm -v $PWD:/app jvisser/theklarakers_com-dev npm update`
+
+OR:
+
+- Run `make watch` and open `http://localhost:3000` and start developing with browserSync
 
 
 ## Copyright and License
