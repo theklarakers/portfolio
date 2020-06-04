@@ -1,11 +1,12 @@
-apiVersion: extensions/v1beta1
+---
+apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 metadata:
   name: theklarakers-ingress
   namespace: theklarakers
   annotations:
     kubernetes.io/ingress.class: nginx
-    certmanager.k8s.io/cluster-issuer: letsencrypt-production
+    cert-manager.io/cluster-issuer: "letsencrypt-production"
 spec:
   tls:
   - hosts:
@@ -34,11 +35,14 @@ spec:
   - port: 80
 ---
 kind: Deployment
-apiVersion: apps/v1beta1
+apiVersion: apps/v1
 metadata:
   name: web
   namespace: theklarakers
 spec:
+  selector:
+    matchLabels:
+      run: web
   replicas: 2
   progressDeadlineSeconds: 90
   template:
