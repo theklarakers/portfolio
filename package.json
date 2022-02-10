@@ -27,6 +27,6 @@
     "gulp-rename": "^1.4.0",
     "gulp-sass": "^3.2.1",
     "gulp-uglify": "3.0.0",
-    "node-sass": "^4.13.1"
+    "node-sass": "^7.0.0"
   }
 }
